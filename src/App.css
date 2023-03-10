@@ -95,6 +95,15 @@ body, .ant-input-affix-wrapper, .ant-input{
   font-size: 12px;
   margin-left: 4px;
 }
+.company-text-area{
+  width: 70%; 
+  margin-top: 1rem;
+  background-color: #F0F0F0;
+  border: none;
+  border-radius: 10px;
+  padding: 6px;
+  min-height: 40px;
+}
 .text-submit-btn{
   margin: 1rem 0 0 1rem;
   cursor: pointer;
@@ -178,6 +187,7 @@ body, .ant-input-affix-wrapper, .ant-input{
   min-height: 40px;
   border: none;
   border-radius: 10px;
+  cursor: pointer;
 }
 .add-save-contacts{
   display: flex;
@@ -185,7 +195,7 @@ body, .ant-input-affix-wrapper, .ant-input{
   align-items: center;
   justify-content: space-between;
   height: 100%;
-  margin-top: 10px;
+  /* margin-top: 10px; */
 }
 .add-more{
   width: 100%;

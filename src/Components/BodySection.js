@@ -123,7 +123,12 @@ const RightSection = () => {
   const addressShowDrawer = () => {
     setAddressOpen(true);
   };
-  
+  const [floorNum, setFloorNum] = useState("C-1/351");
+  const [area, setArea] = useState("GICD");
+  const [landmark, setLandmark] = useState("Vadodara");
+  const [city, setCity] = useState("India");
+  const [pincode, setPincode] = useState("598746");
+
   return (
     <div className="rightsection">
       <h2>About Us</h2>
@@ -135,14 +140,14 @@ const RightSection = () => {
         </div>
         <div className="verify">
           <StarFilled />
-          <a href="#">Verify Company</a>
+          <a href="/">Verify Company</a>
         </div>
       </div>
       <div style={{ display: "flex" }}>
         {editText ? (
           <>
             <textarea
-              style={{ width: "70%", marginTop: "1rem" }}
+              className="company-text-area"
               rows="2"
               onChange={(e) => setDisplayText(e.target.value)}
             >
@@ -174,11 +179,21 @@ const RightSection = () => {
       <AddressDrawer
         addressOpen={addressOpen}
         setAddressOpen={setAddressOpen}
+        setFloorNum={setFloorNum}
+        setArea={setArea}
+        setLandmark={setLandmark}
+        setCity={setCity}
+        setPincode={setPincode}
       />
       <AllTabs
         showDrawer={showDrawer}
         team={team}
         addressShowDrawer={addressShowDrawer}
+        floorNum={floorNum}
+        area={area}
+        landmark={landmark}
+        city={city}
+        pincode={pincode}
       />
     </div>
   );
@@ -189,14 +204,14 @@ const DrawerAll = (props) => {
     props.setOpen(false);
   };
 
-  const [addName, setAddName] = useState("Default Team");
+  // const [addName, setAddName] = useState("Default Team");
   const [addEmail, setAddEmail] = useState("Default@email");
   const [addPhone, setAddPhone] = useState("9569243210");
 
   const addContact = () => {
     const allTeam = props.team.concat([
       {
-        teamName: addName,
+        teamName: "Default Team",
         teamEmail: addEmail,
         teamPhone: addPhone,
       },
@@ -205,7 +220,7 @@ const DrawerAll = (props) => {
     setInsideOpen(false);
   };
   const deleteContact = (teams) => {
-    const allTeamDT = props.team.filter((tm) => tm != teams);
+    const allTeamDT = props.team.filter((tm) => tm !== teams);
     props.setTeam(allTeamDT);
   };
 
@@ -339,25 +354,30 @@ const AddressDrawer = (props) => {
           <input
             className="add-inputs marg-4"
             placeholder="Floor Number / Block No / Office Name"
+            onChange={(e)=>props.setFloorNum(e.target.value)}
           />
           <input
             className="add-inputs marg-4"
             placeholder="Area / Locality"
+            onChange={(e)=>props.setArea(e.target.value)}
           />
           <input
             className="add-inputs marg-4"
             placeholder="Nearest Landmark"
+            onChange={(e)=>props.setLandmark(e.target.value)}
           />
           <input
             className="add-inputs marg-4"
             placeholder="Town / City"
+            onChange={(e)=>props.setCity(e.target.value)}
           />
           <input
             className="add-inputs marg-4"
             placeholder="Pincode"
+            onChange={(e)=>props.setPincode(e.target.value)}
           />
         </div>
-        <button className="btn-save-contact">Save</button>
+        <button className="btn-save-contact" onClick={addressOnClose}>Save</button>
       </div>
     </Drawer>
   );
@@ -408,7 +428,11 @@ const AllTabs = (props) => {
             />
           </div>
           <div className="info-content-edit">
-            <p>c1/hj/6565, abcd, asdfghjk, India</p>
+            <p>
+              {props.floorNum} {props.area} {props.landmark}
+              <br />
+              {props.city} {props.pincode}
+            </p>
           </div>
         </div>
         <div className="contact">
