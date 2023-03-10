@@ -22,8 +22,11 @@ import {
   TwitterOutlined,
   ArrowLeftOutlined,
   DeleteOutlined,
+  LinkOutlined,
+  PaperClipOutlined,
+  ClusterOutlined,
 } from "@ant-design/icons";
-import { Tabs, Button, Drawer } from "antd";
+import { Tabs, Drawer } from "antd";
 
 const BodySection = () => {
   return (
@@ -104,6 +107,23 @@ const RightSection = () => {
   const showDrawer = () => {
     setOpen(true);
   };
+  const [team, setTeam] = useState([
+    {
+      teamName: "Sales Team",
+      teamEmail: "salesteam@br.in",
+      teamPhone: "9876543210",
+    },
+    {
+      teamName: "Marketing Team",
+      teamEmail: "marketing@br.in",
+      teamPhone: "9569243210",
+    },
+  ]);
+  const [addressOpen, setAddressOpen] = useState(false);
+  const addressShowDrawer = () => {
+    setAddressOpen(true);
+  };
+  
   return (
     <div className="rightsection">
       <h2>About Us</h2>
@@ -150,8 +170,16 @@ const RightSection = () => {
           </>
         )}
       </div>
-      <DrawerAll open={open} setOpen={setOpen} />
-      <AllTabs showDrawer={showDrawer} />
+      <DrawerAll open={open} setOpen={setOpen} team={team} setTeam={setTeam} />
+      <AddressDrawer
+        addressOpen={addressOpen}
+        setAddressOpen={setAddressOpen}
+      />
+      <AllTabs
+        showDrawer={showDrawer}
+        team={team}
+        addressShowDrawer={addressShowDrawer}
+      />
     </div>
   );
 };
@@ -160,33 +188,34 @@ const DrawerAll = (props) => {
   const onClose = () => {
     props.setOpen(false);
   };
-  const [team, setTeam] = useState([
-    {
-      teamName: "Sales Team",
-      teamEmail: "salesteam@br.in",
-      teamPhone: "9876543210",
-    },
-    {
-      teamName: "Marketing Team",
-      teamEmail: "marketing@br.in",
-      teamPhone: "9569243210",
-    },
-  ]);
+
+  const [addName, setAddName] = useState("Default Team");
+  const [addEmail, setAddEmail] = useState("Default@email");
+  const [addPhone, setAddPhone] = useState("9569243210");
 
   const addContact = () => {
-    const allTeam = team.concat([
+    const allTeam = props.team.concat([
       {
-        teamName: "Hello Team",
-        teamEmail: "Hello@br.in",
-        teamPhone: "9569243210",
+        teamName: addName,
+        teamEmail: addEmail,
+        teamPhone: addPhone,
       },
     ]);
-    setTeam(allTeam);
+    props.setTeam(allTeam);
+    setInsideOpen(false);
   };
-//   const deleteContact = (teams) => {
-//     const allTeamDT = team.filter((tm) => tm.teamEmail !== teams.teamEmail);
-//     console.log("setTeam", allTeamDT);
-//   };
+  const deleteContact = (teams) => {
+    const allTeamDT = props.team.filter((tm) => tm != teams);
+    props.setTeam(allTeamDT);
+  };
+
+  const [insideOpen, setInsideOpen] = useState(false);
+  const insideShowDrawer = () => {
+    setInsideOpen(true);
+  };
+  const insideOnClose = () => {
+    setInsideOpen(false);
+  };
 
   return (
     <>
@@ -203,7 +232,7 @@ const DrawerAll = (props) => {
           Please provide the company's email & contacts.
         </p>
         <div style={{ marginTop: "40px" }}>
-          {team.map((teams, i) => {
+          {props.team.map((teams, i) => {
             return (
               <div className="contact-side" key={i}>
                 <div className="info-content-edit">
@@ -218,7 +247,7 @@ const DrawerAll = (props) => {
                       color: "#ff0000",
                       cursor: "pointer",
                     }}
-                    // onClick={() => deleteContact()}
+                    onClick={() => deleteContact(teams)}
                   />
                   <EditFilled
                     style={{
@@ -227,8 +256,48 @@ const DrawerAll = (props) => {
                       color: "#ff0000",
                       cursor: "pointer",
                     }}
-                    onClick={(teams) => addContact(teams)}
+                    onClick={insideShowDrawer}
                   />
+                  <Drawer
+                    title="Contacts"
+                    placement="right"
+                    onClose={insideOnClose}
+                    open={insideOpen}
+                    closeIcon={
+                      <ArrowLeftOutlined style={{ fontSize: "24px" }} />
+                    }
+                    headerStyle={{ borderBottom: "none" }}
+                    bodyStyle={{ padding: "0 24px 24px 24px" }}
+                  >
+                    <div className="add-save-contacts">
+                      <div>
+                        <p style={{ marginTop: "0" }}>
+                          Please provide the company's email & contacts.
+                        </p>
+                        <p>Email ID</p>
+                        <input
+                          className="add-inputs"
+                          placeholder="eg: abcfdr@fgh.as"
+                          onChange={(e) => setAddEmail(e.target.value)}
+                        />
+                        <button className="add-more">Add More</button>
+                        <p>Contact Number</p>
+                        <input
+                          type="number"
+                          className="add-inputs"
+                          placeholder="eg: 258794613"
+                          onChange={(e) => setAddPhone(e.target.value)}
+                        />
+                        <button className="add-more">Add More</button>
+                      </div>
+                      <button
+                        className="btn-save-contact"
+                        onClick={() => addContact()}
+                      >
+                        Save
+                      </button>
+                    </div>
+                  </Drawer>
                 </div>
                 <div className="info-content-edit">
                   <MailOutlined
@@ -248,6 +317,49 @@ const DrawerAll = (props) => {
         </div>
       </Drawer>
     </>
+  );
+};
+
+const AddressDrawer = (props) => {
+  const addressOnClose = () => {
+    props.setAddressOpen(false);
+  };
+  return (
+    <Drawer
+      title="Address"
+      placement="right"
+      onClose={addressOnClose}
+      open={props.addressOpen}
+      closeIcon={<ArrowLeftOutlined style={{ fontSize: "24px" }} />}
+      headerStyle={{ borderBottom: "none" }}
+      bodyStyle={{ padding: "0 24px 24px 24px" }}
+    >
+      <div className="add-save-contacts">
+        <div>
+          <input
+            className="add-inputs marg-4"
+            placeholder="Floor Number / Block No / Office Name"
+          />
+          <input
+            className="add-inputs marg-4"
+            placeholder="Area / Locality"
+          />
+          <input
+            className="add-inputs marg-4"
+            placeholder="Nearest Landmark"
+          />
+          <input
+            className="add-inputs marg-4"
+            placeholder="Town / City"
+          />
+          <input
+            className="add-inputs marg-4"
+            placeholder="Pincode"
+          />
+        </div>
+        <button className="btn-save-contact">Save</button>
+      </div>
+    </Drawer>
   );
 };
 
@@ -272,7 +384,7 @@ const AllTabs = (props) => {
           <div className="info-content-edit">
             <MailOutlined style={{ fontSize: "22px", color: "#909090" }} />
             <p>salesteam@br.in</p>
-            <div className="contact-num">+5</div>
+            <div className="contact-num">+{props.team.length}</div>
           </div>
           <div className="info-content-edit">
             <PhoneOutlined style={{ fontSize: "22px", color: "#909090" }} />
@@ -292,6 +404,7 @@ const AllTabs = (props) => {
                 color: "#ff0000",
                 cursor: "pointer",
               }}
+              onClick={props.addressShowDrawer}
             />
           </div>
           <div className="info-content-edit">
@@ -300,9 +413,7 @@ const AllTabs = (props) => {
         </div>
         <div className="contact">
           <div className="info-content-edit">
-            <ThunderboltOutlined
-              style={{ fontSize: "22px", color: "#909090" }}
-            />
+            <ClusterOutlined style={{ fontSize: "22px", color: "#909090" }} />
             <h2>Hours of operations</h2>
             <EditFilled
               style={{
@@ -321,9 +432,7 @@ const AllTabs = (props) => {
       <div className="information-2">
         <div className="content-2">
           <div className="info-content-edit">
-            <ThunderboltOutlined
-              style={{ fontSize: "22px", color: "#909090" }}
-            />
+            <LinkOutlined style={{ fontSize: "22px", color: "#909090" }} />
             <h2>Social Media & Links</h2>
             <EditFilled
               style={{
@@ -371,9 +480,7 @@ const AllTabs = (props) => {
         </div>
         <div className="content-2">
           <div className="info-content-edit">
-            <ThunderboltOutlined
-              style={{ fontSize: "22px", color: "#909090" }}
-            />
+            <PaperClipOutlined style={{ fontSize: "22px", color: "#909090" }} />
             <h2>Statement</h2>
             <EditFilled
               style={{
@@ -387,6 +494,80 @@ const AllTabs = (props) => {
           <div className="info-content-edit">
             <p>You think it we ink it.</p>
             <div className="contact-num">+2</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+  const PrivacyPolicy = (
+    <div>
+      <h3>Your Privacy Matters</h3>
+      <div className="flex-tcp">
+        <div>
+          <h4>1. Introduction</h4>
+          <p style={{ color: "#909090" }}>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Amet
+            mattis vulputate enim nulla aliquet porttitor. Id semper risus in
+            hendrerit gravida rutrum quisque non tellus. Lectus quam id leo in
+            vitae. Volutpat commodo sed egestas egestas fringilla phasellus.
+            Tristique sollicitudin nibh sit amet commodo nulla facilisi nullam
+            vehicula. Congue eu consequat ac felis donec et. Elit eget gravida
+            cum sociis. Velit ut tortor pretium viverra suspendisse potenti
+            nullam. Laoreet suspendisse interdum consectetur libero id faucibus.
+            Nisl rhoncus mattis rhoncus urna neque viverra. In ante metus dictum
+            at tempor. Purus semper eget duis at tellus at. Tincidunt eget
+            nullam non nisi. Velit ut tortor pretium viverra suspendisse potenti
+            nullam. Vitae nunc sed velit dignissim sodales. Leo integer
+            malesuada nunc vel risus commodo viverra maecenas. Bibendum est
+            ultricies integer quis. At erat pellentesque adipiscing commodo elit
+            at imperdiet dui accumsan. Dolor sit amet consectetur adipiscing
+            elit.
+          </p>
+        </div>
+        <div>
+          <div>
+            <h4>Table of Contents:</h4>
+            <p>Introduction</p>
+            <p style={{ color: "#909090" }}>Data we collect</p>
+            <p style={{ color: "#909090" }}>How we use your data</p>
+            <p style={{ color: "#909090" }}>How we share info</p>
+            <p style={{ color: "#909090" }}>Your choices</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+  const TermsConditions = (
+    <div>
+      <h3>Terms & Conditions</h3>
+      <div className="flex-tcp">
+        <div>
+          <h4>1. Agreement</h4>
+          <p style={{ color: "#909090" }}>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Amet
+            mattis vulputate enim nulla aliquet porttitor. Id semper risus in
+            hendrerit gravida rutrum quisque non tellus. Lectus quam id leo in
+            vitae. Volutpat commodo sed egestas egestas fringilla phasellus.
+            Tristique sollicitudin nibh sit amet commodo nulla facilisi nullam
+            vehicula. Congue eu consequat ac felis donec et. Elit eget gravida
+            cum sociis. Velit ut tortor pretium viverra suspendisse potenti
+            nullam. Laoreet suspendisse interdum consectetur libero id faucibus.
+            Nisl rhoncus mattis rhoncus urna neque viverra. In ante metus dictum
+            at tempor. Purus semper eget duis at tellus at. Tincidunt eget
+            nullam non nisi. Velit ut tortor pretium viverra suspendisse potenti
+            nullam. Vitae nunc sed velit dignissim sodales.
+          </p>
+        </div>
+        <div>
+          <div>
+            <h4>Table of Contents:</h4>
+            <p>Agreement</p>
+            <p style={{ color: "#909090" }}>Service and paid subscription</p>
+            <p style={{ color: "#909090" }}>Right & Laws</p>
+            <p style={{ color: "#909090" }}>3rd party apps</p>
+            <p style={{ color: "#909090" }}>Rights you grant us</p>
           </div>
         </div>
       </div>
@@ -411,12 +592,12 @@ const AllTabs = (props) => {
     {
       key: "4",
       label: `Privacy Policy`,
-      children: `Privacy Policy No Data`,
+      children: PrivacyPolicy,
     },
     {
       key: "5",
       label: `Terms & Conditions`,
-      children: `Terms & Conditions No Data`,
+      children: TermsConditions,
     },
   ];
   return (

@@ -171,3 +171,55 @@ body, .ant-input-affix-wrapper, .ant-input{
 .ant-drawer-title{
   font-size: 24px !important;
 }
+.btn-save-contact{
+  width: 100%;
+  background-color: #ff0000;
+  color: #fff;
+  min-height: 40px;
+  border: none;
+  border-radius: 10px;
+}
+.add-save-contacts{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  margin-top: 10px;
+}
+.add-more{
+  width: 100%;
+  background-color: #ffe6e6;
+  color: #ff0000;
+  border: none;
+  border-radius: 10px;
+  min-height: 30px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+.add-inputs{
+  width: -webkit-fill-available;
+  background-color: #F0F0F0;
+  border: none;
+  min-height: 35px;
+  border-radius: 10px;
+  padding: 6px;
+}
+.flex-tcp{
+  display: flex;
+}
+.flex-tcp>div:nth-of-type(1){
+  width: 80%;
+}
+.flex-tcp>div:nth-of-type(2){
+  width: 20%;
+  padding-left: 1rem;
+}
+.flex-tcp>div:nth-of-type(2)>div{
+  border: 1px solid #909090;
+  padding-left: 1rem;
+  border-radius: 10px;
+}
+.marg-4{
+  margin: 10px 0
+}
